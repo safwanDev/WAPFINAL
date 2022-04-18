@@ -1,0 +1,7 @@
+const User = require('../models/Users');
+
+exports.check = (req, res, next) => { 
+    const user = req.body;
+      const savedUser = User.checkUser(user);
+    res.status(200).json(savedUser);
+}
