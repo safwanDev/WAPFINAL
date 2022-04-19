@@ -1,0 +1,6 @@
+const track = require('../models/Songs');
+
+exports.getsongs = (req, res, next) => {
+      const list = track.getsongs();
+    res.status(200).json(list);
+}

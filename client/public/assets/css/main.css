@@ -1,0 +1,92 @@
+body{
+    margin: 0;
+    padding: 0;
+  
+  }
+  .top{
+  display: flex;
+  height: 15vh;
+  border: 2px solid purple;
+  /* justify-content: center; */
+  /* flex-direction:column */
+   align-items: center; 
+      justify-content: space-around;
+  }
+  .top1{
+   
+  }
+  .top{
+   background-color: orange;
+  
+  }
+  img{
+    height: 14vh;
+  }
+  button{
+   background-color: purple;
+   border-radius: 2vh;
+   height: 5vh;
+   color: white;
+   border: 2px solid purple;
+  }
+  #logout{
+      display: none;
+  }
+  #errorMsg{
+    color: white;
+  }
+  #section{
+     height: 100vh;
+    color: white;
+    background-image: url(../images/6.jpg);
+    background-position:center;
+    background-size: cover;
+  }
+  #section1{
+    height: 100vh;
+   color: white;
+   background-position: center;
+   background-size: cover;
+   display: none;
+ }
+
+ th{ 
+    color:#fff;
+     margin-left: 3px;   }
+     
+  #icon{
+      src: url(../images/play.png);
+      cursor: pointer;
+      height: 50px;
+
+
+  }
+  
+  
+ 
+  #section-height{
+      height: 60px;
+  }
+  .txtSec{
+    margin-left: 6%;
+  }
+  .txtSec h1{
+    font-size: 50px;
+    color: purple;
+    line-height: 70px;
+    float:left;
+  }
+  
+  #footer{
+      height: 13vh;
+      border: 2px solid purple;
+      position: absolute;
+      width: 100%;
+      margin-right: 0px;
+      padding-right: 0px;
+      left: 0;
+      display: none;
+  }
+   #div-songs {
+       color: black;
+   }

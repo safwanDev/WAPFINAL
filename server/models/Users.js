@@ -13,7 +13,7 @@ module.exports = class User {
     }
     else
     {
-     throw new Error("user not found");
+     return new Error("Not found");
     }
 
 }
