@@ -1,11 +1,9 @@
+
+
 window.onload = function () {
-
-    const user = getSessionStorage();
-
-    hideShowControls(user);
-
-    fetchSongs();
-
+    let songList = [];
+    let ownplaylist = [];
+    //Check For User Validation
     async function checkUser() {
         let result = await fetch('http://localhost:8000/users/', {
             method: 'POST',
@@ -20,133 +18,226 @@ window.onload = function () {
 
         let length = Object.keys(result).length; //0
 
-
+        //If User Not valid show error User not Found
         if (length === 0) {
-
-
             console.log('Object is empty.');
             document.getElementById("errorMsg").innerText = "Incorrect User/Pasword";
 
         }
+        //    If User is Valid then set results and show content you want and hide        
         else {
 
             setSessionStorage(result);
-            hideShowControls(result);
+            ShowContent(result);
 
         }
     }
-
-    // for fetching songs
-
-    async function fetchSongs() {
-        let songList = await fetch('http://localhost:8000/songs/getsongs', {
-            method: 'GET',
-            headers: {
-                'Content-type': 'application/json',
-            },
-        }).then(res => res.json());
-        songList.forEach(song => renderSong(song));
-    }
-
-    function renderSong(song) {
-
-
-        var table = document.getElementById('table')
-
-        var row = `<tr>
-							<td> ${song.id}</td>
-							<td>${song.song}</td>
-							<td>${song.artist}</td>
-                            <td><img src="./public/assets/images/play.png" id="icon"></td>
-                            <td> <button id="add">add</button></td>
-                            <audio id="mySong" src="${song.url}" type="audio/mp3"></audio>
-                            </tr>`
-        table.innerHTML += row
-        
-        let mySong = document.getElementById("mySong");
-        var icon = document.getElementById("icon");
-        icon.onclick = function () {
-    
-            if (mySong.paused) {
-                mySong.play();
-                icon.src = "./public/assets/images/pause.png";
-    
-            }
-            else {
-                mySong.pause();
-                icon.src = "./public/assets/images/play.png"
-    
-            }
-        }
-    
-
-
-            
-        
-
-    }
-     
-    
-   
-
-
-    // const div = document.createElement('div');
-
-    // div.classList = 'col-lg-12';
-    // const firstDiv = document.createElement('div');
-    // firstDiv.classList = 'col-lg-3';
-    // firstDiv.innerText = song.id;
-
-    // const SecondDiv = document.createElement('div');
-    // SecondDiv.classList = 'col-lg-3';
-    // SecondDiv.innerText = song.song;
-
-    // const thirdDiv = document.createElement('div');
-    // thirdDiv.classList = 'col-lg-3';
-    // thirdDiv.innerText = song.artist;
-
-
-    // div.appendChild(firstDiv);
-    // div.appendChild(SecondDiv);
-    // div.appendChild(thirdDiv);
-
-    // document.getElementById("div-songs").appendChild(div);
-
-    // const actions = document.createElement('p');
-    // const updateBtn = document.createElement('a');
-    // updateBtn.classList = 'btn btn-secondary';
-    // updateBtn.textContent = 'UPDATE';
-    // updateBtn.addEventListener('click', function(event) {
-    //     event.preventDefault();
-    //     document.getElementById('product-heading').textContent = 'Edit Product';
-    //     document.getElementById('title').value = prod.title;
-    //     document.getElementById('isbn').value = prod.isbn;
-    //     document.getElementById('publishedDate').value = prod.publishedDate;
-    //     document.getElementById('author').value = prod.author;
-    //     document.getElementById('product-btn').dataset.id = prod.id;
-    // });
-
-
-
-    function hideShowControls(data) {
-
-
-
+    //check on reload for the session
+    const user = getSessionStorage();
+    ShowContent(user);
+    function ShowContent(data) {
         if (data) {
             document.getElementById("section").style.display = 'none';
             document.getElementById("section1").style.display = 'block';
             document.getElementById("user-form").style.display = 'none';
             document.getElementById("logout").style.display = 'block';
+            document.getElementById("center").style.display = 'block';
+            document.getElementById("footer").style.display = 'block';
+           
 
+
+            getPlaylist();
         }
         else {
             hide();
         }
     }
+    //Then Fetch Songs From the Server
+    fetchSongs();
+
+    // for fetching songs
+    async function fetchSongs() {
+        songList = await fetch('http://localhost:8000/songs/allsongs', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+            },
+        }).then(res => res.json());
+
+        songList.forEach(song => renderSong(song));
+        // 
+        addbtn(songList);
+    }
+    function addbtn(songList) {
+        for (let i = 0; i < songList.length; ++i) {
+            let addbutton = document.getElementById("add" + songList[i].id);
+            addbutton.style.cursor = "pointer";
+            addbutton.addEventListener('click', function (event) {
+
+                event.preventDefault();
+                const songpointer = songList.find((e) => e.id == songList[i].id);
+
+                const index = ownplaylist.findIndex(item => item.id == songList[i].id);
+                if (index < 0) {
+
+                    ownplaylist.push(songpointer);
+                    //addsong on in servre playlist
+                    addSongInServerPlaylist(songpointer);
+                    //Rendering playlist in client                       
+                    PopulatingPlayList(songpointer);
+                    for (let i = 0; i < ownplaylist.length; i++) {
+
+                        remove(ownplaylist[i]);
+                        bindPlayEvent(ownplaylist[i]);
+                    }
+
+                }
+
+            });
+
+
+        }
+
+
+
+    }
+
+
+
+
+
+
+    //   getplayList
+    async function getPlaylist() {
+        let res = await fetch('http://localhost:8000/songs/' + user.id + '/MySongs', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+            },
+
+        }
+
+        ).then(response => response.json());
+
+        //
+        if (res && res.mySong && res.mySong.length > 0) {
+            ownplaylist = res.mySong;
+            ownplaylist.forEach(song => PopulatingPlayList(song));
+
+
+            for (let i = 0; i < ownplaylist.length; i++) {
+
+                remove(ownplaylist[i]);
+                bindPlayEvent(ownplaylist[i]);
+            }
+
+        }
+    }
+
+
+    function remove(data) {
+
+
+        let removebtn = document.getElementById("remove" + data.id);
+        removebtn.style.cursor = "pointer";
+        removebtn.addEventListener('click', async function (event) {
+            event.preventDefault();
+            alert('Are you sure you want to delete song from playlist');
+            let result = await fetch('http://localhost:8000/songs/' + data.id + '/' + user.id + '/deletesong', {
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+            }
+
+            ).then(response => response);
+            if (result) {
+
+                location.reload();
+
+            }
+
+        }, { once: true });
+
+
+    }
+
+    //display playlist on client
+    function PopulatingPlayList(item) {
+        var table = document.getElementById('table1');
+        var row = `<tr id="song${item.id}">
+							<td> ${item.id}</td>
+							<td>${item.song}</td>
+                          <td><img src="./public/assets/images/play.png" id="icon${item.id}"></td>
+                          <td><button id="remove${item.id}"> Remove </button></td> 
+                            <audio id="mySong${item.id}" src="${item.url}" type="audio/mp3"></audio>
+                            </tr>`
+        table.innerHTML += row
+
+
+
+    }
+    function bindPlayEvent(item) {
+
+        let mySong = document.getElementById("mySong" + item.id);
+        var icon = document.getElementById("icon" + item.id);
+        icon.style.cursor = "pointer"
+        icon.addEventListener('click', function (event) {
+            document.getElementById("musicPlayer").src = item.url;
+
+            if (mySong.paused) {
+
+                icon.src = "./public/assets/images/pause.png";
+
+            }
+            else {
+                mySong.pause();
+                icon.src = "./public/assets/images/play.png"
+
+            }
+        });
+
+    }
+
+    // rendering song on client
+    function renderSong(song) {
+
+
+        var table = document.getElementById('table')
+
+        var row = `<tr id="song${song.id}">
+							<td> ${song.id}</td>
+							<td>${song.song}</td>
+							<td>${song.artist}</td>
+                
+                            <td> <button id="add${song.id}">add</button></td>
+                           
+                            </tr>`
+        table.innerHTML += row
+    }
+
+    async function addSongInServerPlaylist(song) {
+        let result = await fetch('http://localhost:8000/songs/addInPlaylist', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+            },
+
+            body: JSON.stringify({
+
+                userid: user.id,
+                id: song.id,
+            })
+
+        }).then(res => res.json());
+
+    }
+
 
     document.getElementById("logout").onclick = function (event) {
 
         sessionStorage.removeItem("userDetails");
+        document.getElementById("table1").innerHTML = "";
         hide();
 
     }
@@ -158,6 +249,8 @@ window.onload = function () {
         document.getElementById("user-form").style.display = 'block';
 
         let logbtn = document.getElementById("logout").style.display = 'none';
+        document.getElementById("center").style.display = 'none';
+
     }
 
 
@@ -168,19 +261,70 @@ window.onload = function () {
     }
 
     function getSessionStorage() {
-
         const response = sessionStorage.getItem('userDetails');
-
         return JSON.parse(response);
-
     }
-
-
-
     document.getElementById("submit").onclick = function () {
         checkUser();
-        console.log("welcome");
     }
+
+    document.getElementById('searchbtn').onclick = function (event) {
+        document.getElementById("searchMsg").innerText = '';
+        let searchString = document.getElementById('search').value;
+
+        const allsongs = songList.filter(s => s.song.toLowerCase().includes(searchString.toLowerCase()));
+
+
+
+        if (allsongs.length == 0 || searchString == null || searchString == "") {
+            // document.getElementById("searchMsg").innerText = "No Song found";
+
+
+        }
+        else {
+            for (let i = 0; i < allsongs.length; i++) {
+                var table = document.getElementById('table')
+                table.innerHTML = "";
+
+                var row = `<tr id="song${allsongs[i].id}">
+                                    <td> ${allsongs[i].id}</td>
+                                    <td>${allsongs[i].song}</td>
+                                    <td>${allsongs[i].artist}</td>
+                        
+                                    <td> <button id="add${allsongs[i].id}">add</button></td>
+                                   
+                                    </tr>`
+                table.innerHTML += row
+                addbtn(allsongs);
+            }
+            // for (let i = 0; i < allsongs.length; i++) {
+
+            //     document.getElementById("songsBody").innerHTML = tablerows;
+
+            // const addBtn2 = document.getElementById("add" + allsongs[i].id);
+
+            //  addBtn2.addEventListener('click', function (event) {
+
+
+            //  });
+
+            //     // playBtn2.addEventListener('click', function (event) {
+
+            //     //     document.getElementById("audio-player").src = allsongs[i].path;
+
+            //     // })
+
+            // }
+
+        }
+
+        event.preventDefault();
+
+    }
+
+
+
+
 
 }
 

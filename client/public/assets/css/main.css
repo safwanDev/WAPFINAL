@@ -3,6 +3,17 @@ body{
     padding: 0;
   
   }
+  #table1{
+  
+ 
+width: 97%;
+  }
+  #table{
+   
+  
+    margin:10px ;
+    width: 95%;
+      }
   .top{
   display: flex;
   height: 15vh;
@@ -12,15 +23,14 @@ body{
    align-items: center; 
       justify-content: space-around;
   }
-  .top1{
-   
-  }
   .top{
    background-color: orange;
-  
+  }
+  .center{
+    display: none;
   }
   img{
-    height: 14vh;
+    height: 10vh;
   }
   button{
    background-color: purple;
@@ -42,10 +52,34 @@ body{
     background-position:center;
     background-size: cover;
   }
+  #div-songs{
+margin-left: 10px;
+
+
+  }
+  #bg-info2 {
+    background-color: purple !important;
+    --bs-bg-opacity: 1;
+    
+  }
+.bg-info1 {
+    background-color: purple !important;
+    --bs-bg-opacity: 1;
+  }
+  .bg-info2.thead {
+    color: #fff;
+  }
+  .bg-info1.thead1 {
+    color: #fff;
+  }
+
+
+
   #section1{
     height: 100vh;
    color: white;
    background-position: center;
+   background-image: url(../images/6.jpg);
    background-size: cover;
    display: none;
  }
@@ -61,6 +95,7 @@ body{
 
 
   }
+  
   
   
  
@@ -89,4 +124,7 @@ body{
   }
    #div-songs {
        color: black;
+   }
+   audio{
+     width: 100%;
    }

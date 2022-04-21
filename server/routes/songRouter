@@ -1,5 +1,10 @@
 const express=require('express');
 const SongController = require('../controller/songController');
 const router = express.Router();
-router.get('/getsongs', SongController.getsongs);
+router.get('/allsongs', SongController.getsongs);
+router.delete('/:id/:userId/deletesong', SongController.deleteId);
+router.get('/:userId/MySongs', SongController.getMySongs);
+router.post('/addInPlaylist', SongController.addSongPlaylist);
+
 module.exports = router;
+

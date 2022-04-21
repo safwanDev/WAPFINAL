@@ -4,3 +4,18 @@ exports.getsongs = (req, res, next) => {
       const list = track.getsongs();
     res.status(200).json(list);
 }
+exports.addSongPlaylist = (req, res, next) => {
+  const  request = req.body;
+  const updatedSong = track.addSong(request);
+  res.status(200).json(updatedSong);
+}
+exports.getMySongs = (req, res, next) => {
+  const songList = track.fetchPlayList(req.params.userId);
+  res.status(200).json(songList);
+}
+exports.deleteId = (req, res, next) => {
+  const songid=req.params.id;
+  const userid=req.params.userId;
+  track.deleteId(songid,userid);
+  res.status(200).end();
+}

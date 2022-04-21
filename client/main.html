@@ -14,6 +14,16 @@
   <!-- header div -->
   <div class="top">
      <div class="left top1" ><img src="./public/assets/images/logo11.png" alt="logo"></div>
+     <!-- center search -->
+
+     <form id="search-form" >
+     <div class="center top1" id="center"><label for="search"></label><input type="text" name="user" id="search"  placeholder="Search Song">
+      <button type="button " id="searchbtn" >search</button>
+      <div class="error"><label id="searchMsg"> </label> </div>
+      </form>
+    </div>
+     
+     
      <!-- from input text -->
     <form id="user-form" >
      <div class="right top1"><input type="text" name="user" id="user"  placeholder="UserName">
@@ -36,13 +46,13 @@
  <!-- div for showing songs -->
  <div id="section1">
   <div class="row" id="div-songs">
-      <table class = " table table-striped" id="table">
-       <tr class="bg-info">
-         <th> #id</th>
-         <th> song </th>
-         <th> artist</th>
-         <th>play</th>
-         <th> action</th>
+  <div><h1>All songs</h1> </div>
+      <table class = " table" id="table">
+       <tr class="bg-info2" id="bg-info2">
+         <th class="thead"> #id</th>
+         <th class="thead"> song </th>
+         <th class="thead"> artist</th>
+         <th class="thead"> action</th>
          
        </tr>
        <tbody id="myTable">
@@ -53,11 +63,32 @@
 
 
     <div id="playList">
-      <h1>Your PlayList</h1> </div> 
+      <h1>Your PlayList</h1> 
+      <table class = " table " id="table1">
+        <tr class="bg-info1">
+          <th class="thead1"> #id</th>
+          <th class="thead1"> title</th>
+          <th class="thead1"> play</th>
+          <th class="thead1">action</th>
+        </tr>
+        <tbody id="myTable1b">
+          <tr>
+       </tr> 
+       </tbody>
+       </table>
+    
+    
+    
+    </div> 
 
   </div>
 </div>
-<div id="footer"></div>
+<div id="footer">
+  <div id='audio'><audio controls autoplay id="musicPlayer" controls src=''></audio></div> 
+  <div id="player"></div>
+
+
+</div>
 
  
 <body>
