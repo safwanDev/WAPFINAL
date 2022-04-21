@@ -169,15 +169,18 @@ window.onload = function () {
 
 
     }
+    //play button bind=======================================
     function bindPlayEvent(item) {
 
         let mySong = document.getElementById("mySong" + item.id);
         var icon = document.getElementById("icon" + item.id);
         icon.style.cursor = "pointer"
         icon.addEventListener('click', function (event) {
-            document.getElementById("musicPlayer").src = item.url;
+            // document.getElementById("musicPlayer").src = item.url;
 
             if (mySong.paused) {
+                mySong.play();
+                // mySong.pause();
 
                 icon.src = "./public/assets/images/pause.png";
 
@@ -228,7 +231,7 @@ window.onload = function () {
 
     document.getElementById("logout").onclick = function (event) {
 
-        sessionStorage.removeItem("userDetails");
+        sessionStorage.removeItem("Token");
         document.getElementById("table1").innerHTML = "";
         hide();
 
@@ -248,30 +251,23 @@ window.onload = function () {
 
     function setSessionStorage(item) {
 
-        sessionStorage.setItem('userDetails', JSON.stringify(item));
+        sessionStorage.setItem('Token', JSON.stringify(item));
 
     }
-
+    // 
     function getSessionStorage() {
-        const response = sessionStorage.getItem('userDetails');
+        const response = sessionStorage.getItem('Token');
         return JSON.parse(response);
     }
     document.getElementById("submit").onclick = function () {
         checkUser();
     }
-
+// SEARCH BUTTON
     document.getElementById('searchbtn').onclick = function (event) {
         document.getElementById("searchMsg").innerText = '';
         let searchString = document.getElementById('search').value;
-
         const allsongs = songList.filter(s => s.song.toLowerCase().includes(searchString.toLowerCase()));
-
-
-
         if (allsongs.length == 0 || searchString == null || searchString == "") {
-            // document.getElementById("searchMsg").innerText = "No Song found";
-
-
         }
         else {
             for (let i = 0; i < allsongs.length; i++) {
@@ -289,30 +285,54 @@ window.onload = function () {
                 table.innerHTML += row
                 addbtn(allsongs);
             }
-            // for (let i = 0; i < allsongs.length; i++) {
-
-            //     document.getElementById("songsBody").innerHTML = tablerows;
-
-            // const addBtn2 = document.getElementById("add" + allsongs[i].id);
-
-            //  addBtn2.addEventListener('click', function (event) {
-
-
-            //  });
-
-            //     // playBtn2.addEventListener('click', function (event) {
-
-            //     //     document.getElementById("audio-player").src = allsongs[i].path;
-
-            //     // })
-
-            // }
 
         }
 
         event.preventDefault();
-
     }
+       var whichsong=0;
+       let mp= document.getElementById("musicPlayer")
+      document.getElementById("next").onclick=function () {
+        $("#musicPlayer")[0].pause();
+        $("#musicPlayer")[0].src = '';
+             whichsong++;
+        if (whichsong == ownplaylist.length) {
+            whichsong = 0;
+        }
+        $("#musicPlayer")[0].src = ownplaylist[whichsong].url;
+        if (play) {
+            $("#musicPlayer")[0].play();
+        }
+    }
+    document.getElementById("previous").onclick=function () {
+      $("#musicPlayer")[0].pause();
+      $("#musicPlayer")[0].src = '';
+           whichsong--;
+      if (whichsong == ownplaylist.length) {
+          whichsong = 0;
+      }
+      $("#musicPlayer")[0].src = ownplaylist[whichsong].url;
+      if (play) {
+          $("#musicPlayer")[0].play();
+      }
+  }
+    
+
+
+    // $("#prev-bt").click(function () {
+    //     $("#audio-player")[0].pause();
+    //     $("#audio-player")[0].src = '';
+    //     whichsong++;
+    //     if (whichsong == treeObj.root.length) {
+    //         whichsong = 0;
+    //     }
+    //     $("#audio-player")[0].src = treeObj.root[whichsong];
+    //     if (playing) {
+    //         $("#audio-player")[0].play();
+    //     }
+    // })
+
+
 
 
 
