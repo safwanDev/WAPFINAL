@@ -35,6 +35,7 @@ window.onload = function () {
     //check on reload for the session
     const user = getSessionStorage();
     ShowContent(user);
+    //CONTENT YOU WANT TO SEE AFTER CHECKING SESSION 
     function ShowContent(data) {
         if (data) {
             document.getElementById("section").style.display = 'none';
@@ -43,12 +44,11 @@ window.onload = function () {
             document.getElementById("logout").style.display = 'block';
             document.getElementById("center").style.display = 'block';
             document.getElementById("footer").style.display = 'block';
-           
-
-
+            //AFTER YOU GOT THE SESSION IN GET PLAYLIST           
             getPlaylist();
         }
         else {
+            // SESSION invalid HIDE CONTENT  
             hide();
         }
     }
@@ -65,7 +65,7 @@ window.onload = function () {
         }).then(res => res.json());
 
         songList.forEach(song => renderSong(song));
-        // 
+        // ADD SONG TO SERVER AND FETCH TO CLIENT
         addbtn(songList);
     }
     function addbtn(songList) {
@@ -85,30 +85,21 @@ window.onload = function () {
                     addSongInServerPlaylist(songpointer);
                     //Rendering playlist in client                       
                     PopulatingPlayList(songpointer);
-                    for (var i = 0; i < ownplaylist.length; i++) {
-                        
+                    //BINDING EACH BUTTON
+                    for (let i = 0; i < ownplaylist.length; i++) {
 
-                        remove(ownplaylist[i],i);
+                        remove(ownplaylist[i]);
                         bindPlayEvent(ownplaylist[i]);
                     }
 
                 }
 
             });
-
-
         }
-
-
-
     }
 
 
-
-
-
-
-    //   getplayList
+    //   getplayList OF USER FROM SERVER
     async function getPlaylist() {
         let res = await fetch('http://localhost:8000/songs/' + user.id + '/MySongs', {
             method: 'GET',
@@ -120,7 +111,7 @@ window.onload = function () {
 
         ).then(response => response.json());
 
-        //
+        // IF THE RESPONSE HAVE SONGS THEN RENDER IT ON CLIENT THROUGH POPULATINGPLAY LIST
         if (res && res.mySong && res.mySong.length > 0) {
             ownplaylist = res.mySong;
             ownplaylist.forEach(song => PopulatingPlayList(song));
@@ -158,13 +149,13 @@ window.onload = function () {
 
             }
 
-        }, { once: true });
+        });
 
 
     }
 
     //display playlist on client
-    function PopulatingPlayList(item,index) {
+    function PopulatingPlayList(item) {
         var table = document.getElementById('table1');
         var row = `<tr id="song${item.id}">
 							<td> ${item.id}</td>

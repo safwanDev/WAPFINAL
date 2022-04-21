@@ -139,7 +139,7 @@ margin-left: 10px;
     color:#fff;
     width: 100%;
   }
-  #previous{
+  /* #previous{
 
   }
   #next{
@@ -151,8 +151,12 @@ margin-left: 10px;
   #shuffle{
 
   }
-  #audio{
-
+  
+     */
+     #audio{
     display: flex;
     justify-content: space-evenly;
+  }
+  #musicbtn{
+    margin: 10px;
   }
