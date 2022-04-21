@@ -85,9 +85,10 @@ window.onload = function () {
                     addSongInServerPlaylist(songpointer);
                     //Rendering playlist in client                       
                     PopulatingPlayList(songpointer);
-                    for (let i = 0; i < ownplaylist.length; i++) {
+                    for (var i = 0; i < ownplaylist.length; i++) {
+                        
 
-                        remove(ownplaylist[i]);
+                        remove(ownplaylist[i],i);
                         bindPlayEvent(ownplaylist[i]);
                     }
 
@@ -163,7 +164,7 @@ window.onload = function () {
     }
 
     //display playlist on client
-    function PopulatingPlayList(item) {
+    function PopulatingPlayList(item,index) {
         var table = document.getElementById('table1');
         var row = `<tr id="song${item.id}">
 							<td> ${item.id}</td>

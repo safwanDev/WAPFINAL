@@ -114,7 +114,6 @@ margin-left: 10px;
   
   #footer{
       height: 13vh;
-      border: 2px solid purple;
       position: absolute;
       width: 100%;
       margin-right: 0px;
@@ -122,9 +121,38 @@ margin-left: 10px;
       left: 0;
       display: none;
   }
+  
+    .musicPlayer::-webkit-media-controls-play-button,
+    audio::-webkit-media-controls-panel {
+   background-color: purple;
+    color: #fff;
+    }
+
+
    #div-songs {
        color: black;
    }
    audio{
-     width: 100%;
+     width: 70%;
    }
+   audio i{
+    color:#fff;
+    width: 100%;
+  }
+  #previous{
+
+  }
+  #next{
+
+  }
+  #repeat{
+
+  }
+  #shuffle{
+
+  }
+  #audio{
+
+    display: flex;
+    justify-content: space-evenly;
+  }
